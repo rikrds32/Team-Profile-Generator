@@ -4,6 +4,7 @@ const Intern = require("./lib/Intern");
 const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
+const Engineer = require("./lib/Engineer");
 const DIST_DIR = path.resolve(__dirname, "dist");
 const distPath = path.join(DIST_DIR, "team.html");
 const team = []
@@ -55,3 +56,19 @@ const questions=[
         name: "more"
     }
 ]
+
+function showQuestions(){
+    inquirer.prompt(questions).then(res =>{
+        if(res.role==="manager"){
+            const manager = new Manager(res.name, res.id, res.email, res.office);
+            team.push(manager);
+        } else if(res.role==="engineer"){
+            const engineer = new Engineer(res.name, res.id, res.email, res.github);
+            team.push(engineer);
+        }else {
+            const intern = new Intern(res.name, res.id, res.email, res.school);
+            team.push(intern);
+        }
+
+    })
+}
