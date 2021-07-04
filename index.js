@@ -8,8 +8,9 @@ const Engineer = require("./lib/Engineer");
 const DIST_DIR = path.resolve(__dirname, "dist");
 const distPath = path.join(DIST_DIR, "team.html");
 const team = []
+const render = require("./lib/htmlRenderer");
 
-const questions=[
+const questions = [
     {
         type: "list",
         messege: "What is the employee role?",
@@ -35,19 +36,19 @@ const questions=[
         type: "input",
         message: "what is the office number?",
         name: "oficceNumber",
-        when: (answer) => answer.role==="manager"
+        when: (answer) => answer.role === "manager"
     },
     {
         type: "input",
         message: "what is the github name?",
         name: "github",
-        when: (answer) => answer.role==="engineer"
+        when: (answer) => answer.role === "engineer"
     },
     {
         tyoe: "input",
         message: "what the school name?",
         name: "school",
-        when: (answer) => answer.role==="intern"
+        when: (answer) => answer.role === "intern"
     },
     {
         type: "list",
@@ -57,18 +58,31 @@ const questions=[
     }
 ]
 
-function showQuestions(){
-    inquirer.prompt(questions).then(res =>{
-        if(res.role==="manager"){
+function showQuestions() {
+    inquirer.prompt(questions).then(res => {
+        if (res.role === "manager") {
             const manager = new Manager(res.name, res.id, res.email, res.office);
             team.push(manager);
-        } else if(res.role==="engineer"){
+        } else if (res.role === "engineer") {
             const engineer = new Engineer(res.name, res.id, res.email, res.github);
             team.push(engineer);
-        }else {
+        } else {
             const intern = new Intern(res.name, res.id, res.email, res.school);
             team.push(intern);
         }
-
+        if (res.more === "yes") {
+            showQuestions();
+        } else {
+            generatePage();
+        }
     })
+}
+
+showQuestions();
+
+function generatePage() {
+    const html = render(team);
+    fs.writeFile(distPath, html, (err) => 
+        err ? console.error(err) : console.log("success")
+    );
 }
