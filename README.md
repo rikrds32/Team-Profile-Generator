@@ -6,6 +6,8 @@ A Node.js command-line application that takes in information about employees on 
 
 ![Team-Profile-Generator-video](./Develop/team-profile-generator.webm)
 
+video link: https://drive.google.com/file/d/15igKqV8HgS4f3gHW6UVbafS1xn8tkECW/view
+
 ## Technologies used 
 
 * NodeJS
